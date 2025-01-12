@@ -1,12 +1,13 @@
 package com.duniasteak.service.user.model;
 
 import com.duniasteak.service.db.IdentityEntity;
-import jakarta.persistence.*;
 import lombok.*;
+
+import javax.persistence.*;
 
 @ToString
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "email", "phonenumber"})})
+@Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "email", "phonenumber"})})
 @Getter
 @Setter
 @NoArgsConstructor

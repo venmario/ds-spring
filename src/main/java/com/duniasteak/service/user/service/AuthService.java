@@ -3,6 +3,8 @@ package com.duniasteak.service.user.service;
 import com.duniasteak.service.user.model.User;
 import com.duniasteak.service.user.repo.UserRepository;
 import com.duniasteak.service.util.TemplateResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,11 @@ import java.util.Map;
 @Service
 public class AuthService {
 
-    private TemplateResponse templateResponse;
-    private UserRepository userRepository;
-    private PasswordEncoder encoder;
+    private final TemplateResponse templateResponse;
+    private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
     public AuthService(TemplateResponse templateResponse, UserRepository userRepository, PasswordEncoder encoder){
@@ -45,7 +49,6 @@ public class AuthService {
             if (!(encoder.matches(user.getPassword(), checkUser.getPassword()))) {
                 return new ResponseEntity<>(templateResponse.error("Login credential don't match an account in our system"), HttpStatus.NOT_FOUND);
             }
-
             return getToken(user.getEmail(), user.getPassword());
         }catch (Exception e){
             response = new ResponseEntity<>(templateResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -54,5 +57,7 @@ public class AuthService {
     }
 
     private ResponseEntity<Map> getToken(String email, String password) {
+        logger.info("get Token");
+        return null;
     }
 }

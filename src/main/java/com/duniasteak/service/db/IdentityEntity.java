@@ -1,14 +1,20 @@
 package com.duniasteak.service.db;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.persistence.*;
 import java.util.Date;
 
+@NoArgsConstructor
+@Getter
+@Setter
+@MappedSuperclass
+@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
 public class IdentityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +29,6 @@ public class IdentityEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
-
-    @Column(name = "CREATED_BY", updatable = false, columnDefinition = "varchar(1024) default '-'")
-    private String createdBy;
-
-    @Column(name = "UPDATED_BY", columnDefinition = "varchar(1024) default '-'")
-    private String updatedBy;
 
     @PrePersist
     protected void onCreate() {
