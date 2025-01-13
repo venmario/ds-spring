@@ -36,4 +36,14 @@ public class User extends IdentityEntity {
 
     @Column(name = "role", length = 191)
     private String role;
+
+    @PrePersist
+    public void prePersist() {
+        if (poin == null) {
+            poin = 0L;
+        }
+        if (role == null) {
+            role = "customer";
+        }
+    }
 }

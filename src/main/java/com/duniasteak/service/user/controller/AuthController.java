@@ -33,6 +33,7 @@ public class AuthController {
     public ResponseEntity<Map> register(@Valid @RequestBody UserDto userDto, BindingResult bindingResult){
         ResponseEntity<Map> response;
         try{
+            logger.info(userDto.toString());
             //check if the validation has error
             if (bindingResult.hasErrors()){
                 Map<String, String> errors = new HashMap<>();

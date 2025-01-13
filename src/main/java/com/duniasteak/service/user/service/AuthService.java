@@ -36,13 +36,14 @@ public class AuthService {
     public ResponseEntity<Map> register(User user) {
         ResponseEntity<Map> response;
         try {
+            user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
 
             Map<String, Object> registerResponse = new HashMap<>();
             registerResponse.put("success", true);
             registerResponse.put("message", "User created successfully");
             registerResponse.put("code", HttpStatus.OK.value());
-            response = new ResponseEntity<>(templateResponse.success(null), HttpStatus.OK);
+            response = new ResponseEntity<>(registerResponse, HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             response = new ResponseEntity<>(templateResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
