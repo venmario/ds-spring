@@ -1,9 +1,13 @@
 package com.duniasteak.service.user.model;
 
-import com.duniasteak.service.db.IdentityEntity;
-import lombok.*;
+import com.duniasteak.service.db.BaseEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @ToString
 @Entity
@@ -11,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User extends IdentityEntity {
+public class User extends BaseEntity {
 
     @Column(name = "username", length = 191)
     private String username;
@@ -36,6 +40,9 @@ public class User extends IdentityEntity {
 
     @Column(name = "role", length = 191)
     private String role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Fcm> fcms;
 
     @PrePersist
     public void prePersist() {

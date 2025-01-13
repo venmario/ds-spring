@@ -3,7 +3,6 @@ package com.duniasteak.service.db;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -12,13 +11,9 @@ import java.util.Date;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @MappedSuperclass
-@JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
-public class IdentityEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@JsonIgnoreProperties(value = { "createdAt", "updatedAt"})
+public class DBEntity{
 
     @Column(name = "CREATED_AT", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -32,6 +27,11 @@ public class IdentityEntity {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = new Date();
+        updatedAt = createdAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
     }
 }

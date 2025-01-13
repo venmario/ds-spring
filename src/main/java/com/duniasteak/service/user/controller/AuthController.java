@@ -1,5 +1,6 @@
 package com.duniasteak.service.user.controller;
 
+import com.duniasteak.service.request.auth.LoginRequest;
 import com.duniasteak.service.user.dto.UserDto;
 import com.duniasteak.service.user.mapper.UserMapper;
 import com.duniasteak.service.user.service.AuthService;
@@ -56,12 +57,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map> login(@RequestBody UserDto userDto){
+    public ResponseEntity<Map> login(@RequestBody LoginRequest loginRequest){
         ResponseEntity<Map> response;
         try{
             logger.info("login");
-            userDto.setId(-1);
-            response = authService.login(UserMapper.INSTANCE.dtoToUser(userDto));
+            response = authService.login(loginRequest);
         }catch (Exception e){
             response = new ResponseEntity<>(templateResponse.error(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
