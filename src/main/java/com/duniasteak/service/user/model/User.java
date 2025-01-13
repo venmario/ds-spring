@@ -35,5 +35,5 @@ public class User extends IdentityEntity {
     private Long poin;
 
     @Column(name = "role", length = 191)
-    private String rolg;
+    private String role;
 }

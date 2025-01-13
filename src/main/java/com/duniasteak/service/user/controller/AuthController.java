@@ -9,10 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -27,9 +30,22 @@ public class AuthController {
     Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/register")
-    public ResponseEntity<Map> register(@RequestBody UserDto userDto){
+    public ResponseEntity<Map> register(@Valid @RequestBody UserDto userDto, BindingResult bindingResult){
         ResponseEntity<Map> response;
         try{
+            //check if the validation has error
+            if (bindingResult.hasErrors()){
+                Map<String, String> errors = new HashMap<>();
+                bindingResult.getFieldErrors().forEach(error -> {
+                    errors.put(error.getField(), error.getDefaultMessage());
+                });
+                Map<String, Object> registerResponse = new HashMap<>();
+                registerResponse.put("success", false);
+                registerResponse.put("errorMessage", errors);
+                registerResponse.put("code", HttpStatus.BAD_REQUEST.value());
+                return new ResponseEntity<>(registerResponse, HttpStatus.BAD_REQUEST);
+            }
+            logger.info("register");
             userDto.setId(-1);
             response = authService.register(UserMapper.INSTANCE.dtoToUser(userDto));
         }catch (Exception e){
